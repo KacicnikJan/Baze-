@@ -1,0 +1,32 @@
+DELIMITER &
+CREATE TRIGGER shramba_posodobljenih_jedilnikov
+AFTER UPDATE ON jedilniki
+FOR EACH ROW
+BEGIN
+
+INSERT INTO evidenca_spremenjenih_jedilnikov 
+(
+	CAS_SPREMEMBE,
+	JEDILNIKI_ID,
+	kdaj_STARO,
+	kdaj_NOVO,
+	TIPI_NAMENOV_ID_STARO,
+	TIPI_NAMENOV_ID_NOVO,
+	OSEBE_ID_STARO,
+	OSEBE_ID_NOVO
+) 
+VALUES 
+(
+	NOW(),
+    OLD.ID,
+    OLD.kdaj,
+    NEW.kdaj,
+    OLD.TIPI_NAMENOV_ID,
+    NEW.TIPI_NAMENOV_ID,
+    OLD.OSEBE_ID,
+    NEW.OSEBE_ID
+);
+
+END&
+DELIMITER ;
+
